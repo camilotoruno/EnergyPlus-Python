@@ -1,0 +1,5 @@
+[22:51:17.324567 WARN] No valid weather file defined in either the osm or osw.
+[22:51:17.815490 WARN] The model contains existing objects and is being reset.
+[22:51:18.573407 WARN] /Users/camilotoruno/Documents/Buildings/Dallas/bldg0108172-up00/modified_in.xml: Ducts are entirely within conditioned space but there is moderate leakage to the outside. Leakage to the outside is typically zero or near-zero in these situations, consider revising leakage values. Leakage will be modeled as heat lost to the ambient environment. [context: /HPXML/Building/BuildingDetails/Systems/HVAC/HVACDistribution/DistributionSystemType/AirDistribution, id: "HVACDistribution1"]
+[22:51:20.539340 WARN] Could not find weather file '#<OpenStudio::OptionalPath:0x00007fa18c1b91c8>' referenced in model
+[22:51:20.547393 WARN] EPW file not found or not sent to RunTranslation

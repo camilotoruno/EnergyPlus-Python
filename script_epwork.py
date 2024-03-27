@@ -2,6 +2,25 @@ import eprun_s
 import multiprocessing
 import os 
 
+#TODO Simulation output configuration settings 
+    # in reset_idf_schedules_path.set_EnergyPlus_Simulation_Output 
+        # if no configuration file provided: print no config file provided, using existing IDF file simulation output arguments 
+        # if configuration file provided 
+            # if configuration file does not exists raise RuntimeError()
+
+            # load the configuration file as provided 
+
+            # for each IDF
+                # open the IDF 
+                # for each parameter in the config file 
+                    # if the paramter exists set its values 
+                        # if the parameters match 
+                            # overwrite the original with new args 
+                        # else 
+                            # make new IDF object attribute 
+                # save the IDF
+
+
 if __name__ == '__main__':
     multiprocessing.freeze_support()        # required to prevent issues for multicore processing in run_energyplus_simulations() 
 
@@ -12,7 +31,6 @@ if __name__ == '__main__':
         }
 
     run_args = {
-        'ep_install_path': '/Applications/OpenStudio-3.4.0/EnergyPlus',
 
         'weather_folder': '/Volumes/seas-mtcraig/EPWFromTGW/TGWEPWs',
         # 'weather_folder': '/Users/camilotoruno/Documents/GitHub/EnergyPlus-Python/TGWEPWs_trimmed',
@@ -25,39 +43,20 @@ if __name__ == '__main__':
         # 'output_folder': '/Users/camilotoruno/Documents/GitHub/EnergyPlus-Python/simulations',
 
         'overwrite_output': True, 
-        'verbose': False,
+        'verbose': True,
         "max_cpu_load": 0.7,       # must be in the range [0, 1]. The value 1 indidcates all CPU cores, 0 indicates 1 CPU core
-        'city': None,               # initialize
-        'climate': None,            # initialize
 
+        'ep_install_path': '/Applications/OpenStudio-3.4.0/EnergyPlus',
+
+
+        # Define the desired simulation settings 
         #############  required if setting IDF file requested outputs here rather than in upstream 
         'ResStockToEnergyPlus_repository': '/Users/camilotoruno/Documents/GitHub/building_energy_modeling',         
         'pathnameto_eppy': "/Users/camilotoruno/anaconda3/envs/research/lib/python3.11/site-packages/eppy",
-        "iddfile": "/Applications/OpenStudio-3.4.0/EnergyPlus/Energy+.idd"
+        "iddfile": "/Applications/OpenStudio-3.4.0/EnergyPlus/Energy+.idd",
+        'idf_configuration': "/Users/camilotoruno/Documents/GitHub/EnergyPlus-Python/simulation_output_configuration.idf",      # output settings configuration
         ############
         }
-    
-    # Define the desired output file settings
-    new_Output_Control_Files = {
-		"field":'OutputControl:Files',
-		"options": [
-			# turn on (OpenStudio defaults of no)
-			{'Yes': 'Output_MTR'},  
-
-			{'Yes': 'Output_CSV'},
-
-			{'Yes': 'Output_ESO'},      
-
-			# turn off (OpenStudio defaults of yes)
-			{'No': 'Output_Tabular'},   
-
-			{'No': 'Output_SQLite'},     
-
-			{'No': 'Output_JSON'},
-			]
-		}
-	
-    idf_simulation_options = [new_Output_Control_Files]  # must be a list of dictionaries. Can be empty
 
 
     ################################## RUN SMULATIONS ############################################
@@ -70,6 +69,6 @@ if __name__ == '__main__':
             print(f"{sim}/{total_sims} \t {city} \t\t {scenario}")
             run_args['city'] = city
             run_args['climate'] = scenario
-            eprun_s.run_energyplus_simulations(idf_simulation_options, **run_args)
+            eprun_s.run_energyplus_simulations(**run_args)
             sim += 1
             print("\n\n")

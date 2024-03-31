@@ -25,8 +25,8 @@ if __name__ == '__main__':
     multiprocessing.freeze_support()        # required to prevent issues for multicore processing in run_energyplus_simulations() 
 
     arguments = {
-        'cities': ['Detroit', 'Los Angeles'], 
-        # 'cities': ['Dallas', 'Philadelphia'],
+        # 'cities': ['Detroit', 'Los Angeles'], 
+        'cities': ['Dallas'],
         'climate_scenarios': ["historical_1980-2020", "rcp45cooler_2020-2060"],
         }
 
@@ -36,14 +36,14 @@ if __name__ == '__main__':
         # 'weather_folder': '/Users/camilotoruno/Documents/GitHub/EnergyPlus-Python/TGWEPWs_trimmed',
 
         # 'buildings_folder': '/Users/camilotoruno/Documents/GitHub/EnergyPlus-Python/Buildings',
-        'buildings_folder': '/Users/camilotoruno/Documents/local_research_data/bldgs_idf_output_flags',
+        'buildings_folder': '/Users/camilotoruno/Documents/local_research_data/buildings_config_testing',
 
-        'output_folder': '/Users/camilotoruno/Documents/local_research_data/sims_LA_Detroit',
+        'output_folder': '/Users/camilotoruno/Documents/local_research_data/sims_testing',
         # 'output_folder': 'Volumes/seas-mtcraig/ctoruno/Buildings_Dallas_downsample_simulations',
         # 'output_folder': '/Users/camilotoruno/Documents/GitHub/EnergyPlus-Python/simulations',
 
         'overwrite_output': True, 
-        'verbose': True,
+        'verbose': False,
         "max_cpu_load": 0.7,       # must be in the range [0, 1]. The value 1 indidcates all CPU cores, 0 indicates 1 CPU core
 
         'ep_install_path': '/Applications/OpenStudio-3.4.0/EnergyPlus',

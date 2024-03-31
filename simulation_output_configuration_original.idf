@@ -22,8 +22,6 @@ Meter:Custom,
   res fur gas heating coil,!- Key Name 4
   Heating Coil Crankcase Heater Electricity Energy;  !- Output Variable or Meter Name 4
 
-Output:Meter,unit 1:ElectricityHeating,RunPeriod;
-
 Meter:Custom,
   unit 1:ElectricityCooling,  !- Name
   Electricity,             !- Resource Type
@@ -34,15 +32,11 @@ Meter:Custom,
   res ac cooling coil,     !- Key Name 3
   Cooling Coil Crankcase Heater Electricity Energy;  !- Output Variable or Meter Name 3
 
-Output:Meter,unit 1:ElectricityCooling,RunPeriod;
-
 Meter:Custom,
   unit 1:ElectricityInteriorLighting,  !- Name
   Electricity,             !- Resource Type
   ,                        !- Key Name 1
   InteriorLights:Electricity:Zone:living zone;  !- Output Variable or Meter Name 1
-
-Output:Meter,unit 1:ElectricityInteriorLighting,RunPeriod;
 
 Meter:Custom,
   Central:ElectricityExteriorLighting,  !- Name
@@ -50,15 +44,11 @@ Meter:Custom,
   res lighting exterior,   !- Key Name 1
   Exterior Lights Electricity Energy;  !- Output Variable or Meter Name 1
 
-Output:Meter,Central:ElectricityExteriorLighting,RunPeriod;
-
 Meter:Custom,
   Central:ElectricityGarageLighting,  !- Name
   Electricity,             !- Resource Type
   res lighting garage garage space,  !- Key Name 1
   Lights Electricity Energy;  !- Output Variable or Meter Name 1
-
-Output:Meter,Central:ElectricityGarageLighting,RunPeriod;
 
 Meter:Custom,
   unit 1:ElectricityInteriorEquipment,  !- Name
@@ -86,23 +76,17 @@ Meter:Custom,
   res ceil fan benchmark|living space,  !- Key Name 11
   Electric Equipment Electricity Energy;  !- Output Variable or Meter Name 11
 
-Output:Meter,unit 1:ElectricityInteriorEquipment,RunPeriod;
-
 Meter:Custom,
   unit 1:ElectricityFansHeating,  !- Name
   Electricity,             !- Resource Type
   res fur gas htg supply fan,  !- Key Name 1
   Fan Electricity Energy;  !- Output Variable or Meter Name 1
 
-Output:Meter,unit 1:ElectricityFansHeating,RunPeriod;
-
 Meter:Custom,
   unit 1:ElectricityFansCooling,  !- Name
   Electricity,             !- Resource Type
   res ac clg supply fan,   !- Key Name 1
   Fan Electricity Energy;  !- Output Variable or Meter Name 1
-
-Output:Meter,unit 1:ElectricityFansCooling,RunPeriod;
 
 Meter:Custom,
   unit 1:ElectricityWaterSystems,  !- Name
@@ -112,8 +96,6 @@ Meter:Custom,
   res wh,                  !- Key Name 2
   Water Heater On Cycle Parasitic Electricity Energy;  !- Output Variable or Meter Name 2
 
-Output:Meter,unit 1:ElectricityWaterSystems,RunPeriod;
-
 Meter:Custom,
   unit 1:NaturalGasHeating,!- Name
   NaturalGas,              !- Resource Type
@@ -122,15 +104,11 @@ Meter:Custom,
   res fur gas heating coil,!- Key Name 2
   Heating Coil Ancillary NaturalGas Energy;  !- Output Variable or Meter Name 2
 
-Output:Meter,unit 1:NaturalGasHeating,RunPeriod;
-
 Meter:Custom,
   unit 1:NaturalGasInteriorEquipment,  !- Name
   NaturalGas,              !- Resource Type
   res gas fireplace,       !- Key Name 1
   Gas Equipment NaturalGas Energy;  !- Output Variable or Meter Name 1
-
-Output:Meter,unit 1:NaturalGasInteriorEquipment,RunPeriod;
 
 Meter:Custom,
   unit 1:NaturalGasWaterSystems,  !- Name
@@ -138,33 +116,6 @@ Meter:Custom,
   res wh,                  !- Key Name 1
   Water Heater NaturalGas Energy;  !- Output Variable or Meter Name 1
 
-Output:Meter,unit 1:NaturalGasWaterSystems,RunPeriod;
-
-Output:Meter,unit 1:ElectricityHeating,Hourly;
-
-Output:Meter,unit 1:ElectricityCooling,Hourly;
-
-Output:Meter,unit 1:ElectricityInteriorLighting,Hourly;
-
-Output:Meter,Central:ElectricityExteriorLighting,Hourly;
-
-Output:Meter,Central:ElectricityGarageLighting,Hourly;
-
-Output:Meter,unit 1:ElectricityInteriorEquipment,Hourly;
-
-Output:Meter,unit 1:ElectricityFansHeating,Hourly;
-
-Output:Meter,unit 1:ElectricityFansCooling,Hourly;
-
-Output:Meter,unit 1:ElectricityWaterSystems,Hourly;
-
-Output:Meter,unit 1:NaturalGasHeating,Hourly;
-
-Output:Meter,unit 1:NaturalGasInteriorEquipment,Hourly;
-
-Output:Meter,unit 1:NaturalGasWaterSystems,Hourly;
-
-Output:Meter,Electricity:Facility,Hourly;
 
 Output:Table:Monthly,
   Building Energy Performance - Electricity,  !- Name
@@ -390,20 +341,6 @@ Output:Table:Monthly,
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 OUTPUT:VARIABLE,
     *,                        !- Key Value
     Zone Air Temperature,     !- Variable Name
@@ -429,6 +366,112 @@ OUTPUT:VARIABLE,
     Site Outdoor Air Drybulb Temperature,    !- Variable Name
     Monthly;                  !- Reporting Frequency
 
+
+
+
+Output:Meter,
+  unit 1:ElectricityHeating,
+  RunPeriod;
+
+Output:Meter,
+  unit 1:ElectricityCooling,
+  RunPeriod;
+
+Output:Meter,
+  unit 1:ElectricityInteriorLighting,
+  RunPeriod;
+
+Output:Meter,
+  Central:ElectricityExteriorLighting,
+  RunPeriod;
+
+Output:Meter,
+  Central:ElectricityGarageLighting,
+  RunPeriod;
+
+Output:Meter,
+  unit 1:ElectricityInteriorEquipment,
+  RunPeriod;
+
+Output:Meter,
+  unit 1:ElectricityFansHeating,
+  RunPeriod;
+
+Output:Meter,
+  unit 1:ElectricityFansCooling,
+  RunPeriod;
+
+Output:Meter,
+  unit 1:ElectricityWaterSystems,
+  RunPeriod;
+
+Output:Meter,
+  unit 1:NaturalGasHeating,
+  RunPeriod;
+
+Output:Meter,
+  unit 1:NaturalGasInteriorEquipment,
+  RunPeriod;
+
+Output:Meter,
+  unit 1:NaturalGasWaterSystems,
+  RunPeriod;
+
+Output:Meter,
+  unit 1:ElectricityHeating,
+  Hourly;
+
+Output:Meter,
+  unit 1:ElectricityCooling,
+  Hourly;
+
+Output:Meter,
+  unit 1:ElectricityInteriorLighting,
+  Hourly;
+
+Output:Meter,
+  Central:ElectricityExteriorLighting,
+  Hourly;
+
+Output:Meter,
+  Central:ElectricityGarageLighting,
+  Hourly;
+
+Output:Meter,
+  unit 1:ElectricityInteriorEquipment,
+  Hourly;
+
+Output:Meter,
+  unit 1:ElectricityFansHeating,
+  Hourly;
+
+Output:Meter,
+  unit 1:ElectricityFansCooling,
+  Hourly;
+
+Output:Meter,
+  unit 1:ElectricityWaterSystems,
+  Hourly;
+
+Output:Meter,
+  unit 1:NaturalGasHeating,
+  Hourly;
+
+Output:Meter,
+  unit 1:NaturalGasInteriorEquipment,
+  Hourly;
+
+Output:Meter,
+  unit 1:NaturalGasWaterSystems,
+  Hourly;
+
+Output:Meter,
+  Electricity:Facility,
+  Hourly;
+
+
+
+
 OUTPUT:METER,
     Electricity:Facility,     !- Key Name
     Timestep;                 !- Reporting Frequency
@@ -444,6 +487,7 @@ OUTPUT:METER,
 OUTPUT:METER,
     DistrictHeatingWater:Facility:,    !- Key Name
     Timestep;                 !- Reporting Frequency
+    
 
 OUTPUT:METER:METERFILEONLY,
     NaturalGas:Facility,      !- Key Name

@@ -1,32 +1,14 @@
 import eprun_s
 import multiprocessing
 import os 
-
-#TODO Simulation output configuration settings 
-    # in reset_idf_schedules_path.set_EnergyPlus_Simulation_Output 
-        # if no configuration file provided: print no config file provided, using existing IDF file simulation output arguments 
-        # if configuration file provided 
-            # if configuration file does not exists raise RuntimeError()
-
-            # load the configuration file as provided 
-
-            # for each IDF
-                # open the IDF 
-                # for each parameter in the config file 
-                    # if the paramter exists set its values 
-                        # if the parameters match 
-                            # overwrite the original with new args 
-                        # else 
-                            # make new IDF object attribute 
-                # save the IDF
-
+import sys
 
 if __name__ == '__main__':
     multiprocessing.freeze_support()        # required to prevent issues for multicore processing in run_energyplus_simulations() 
 
     arguments = {
         # 'cities': ['Detroit', 'Los Angeles'], 
-        'cities': ['Dallas'],
+        'cities': ['Dallas', 'Philadelphia'],
         'climate_scenarios': ["historical_1980-2020", "rcp45cooler_2020-2060"],
         }
 
@@ -36,9 +18,9 @@ if __name__ == '__main__':
         # 'weather_folder': '/Users/camilotoruno/Documents/GitHub/EnergyPlus-Python/TGWEPWs_trimmed',
 
         # 'buildings_folder': '/Users/camilotoruno/Documents/GitHub/EnergyPlus-Python/Buildings',
-        'buildings_folder': '/Users/camilotoruno/Documents/local_research_data/buildings_config_testing',
+        'buildings_folder': "/Users/camilotoruno/Documents/local_research_data/buildings_testing",
 
-        'output_folder': '/Users/camilotoruno/Documents/local_research_data/sims_testing',
+        'output_folder': '/Users/camilotoruno/Documents/local_research_data/simulations_testing',
         # 'output_folder': 'Volumes/seas-mtcraig/ctoruno/Buildings_Dallas_downsample_simulations',
         # 'output_folder': '/Users/camilotoruno/Documents/GitHub/EnergyPlus-Python/simulations',
 
@@ -50,12 +32,12 @@ if __name__ == '__main__':
 
 
         # Define the desired simulation settings 
-        #############  required if setting IDF file requested outputs here rather than in upstream 
+        ############  required if setting IDF file requested outputs here rather than in upstream 
         'ResStockToEnergyPlus_repository': '/Users/camilotoruno/Documents/GitHub/building_energy_modeling',         
         'pathnameto_eppy': "/Users/camilotoruno/anaconda3/envs/research/lib/python3.11/site-packages/eppy",
         "iddfile": "/Applications/OpenStudio-3.4.0/EnergyPlus/Energy+.idd",
         'idf_configuration': "/Users/camilotoruno/Documents/GitHub/EnergyPlus-Python/simulation_output_configuration.idf",      # output settings configuration
-        ############
+        ###########
         }
 
 
@@ -69,6 +51,19 @@ if __name__ == '__main__':
             print(f"{sim}/{total_sims} \t {city} \t\t {scenario}")
             run_args['city'] = city
             run_args['climate'] = scenario
-            eprun_s.run_energyplus_simulations(**run_args)
+                # Generate list of simulation jobs to run 
+            jobs = eprun_s.generate_simulation_jobs(**run_args)
+
+            # if the user specified energy plus simulation outputs, ensure they're set within the IDF file
+            if run_args['idf_configuration']:
+                bldg_to_idf_repository = run_args['ResStockToEnergyPlus_repository']
+                if os.path.exists(bldg_to_idf_repository): sys.path.append(bldg_to_idf_repository)            # Source custom script
+                else: raise RuntimeError(f'Cannot find ResStockToEnergyPlus repository for setting IDF simulation outputs {bldg_to_idf_repository}')
+
+                import functions      # import once the path is added 
+                for job in jobs: job.idf = job.idf_path  # make compatible with upstream workflow function 
+                functions.reset_idf_schedules_path.set_EnergyPlus_Simulation_Output(jobs, **run_args)
+
+            eprun_s.run_energyplus_simulations(jobs, **run_args)
             sim += 1
             print("\n\n")

@@ -62,6 +62,8 @@ def generate_simulation_jobs(**kwargs):
     climate = kwargs.get('climate')
 
     # Query input idf
+    print(f"kwargs.get('buildings_folder'): {kwargs.get('buildings_folder')}")
+    print(f"climate, city: {climate}, {city}")
     idf_dir = os.path.join(kwargs.get('buildings_folder'), climate, city)
     if not os.path.exists(idf_dir): raise RuntimeError(f"IDF directory not found: {idf_dir}")
 
@@ -135,7 +137,7 @@ def run_job(job):
     api.state_manager.delete_state(state)           # required to free up memory 
 
 
-def run_energyplus_simulations(**kwargs):
+def run_energyplus_simulations(jobs, **kwargs):
     """ Main function """
 
     # Register XML namespaces for XML file reading / modifying (may not be necessary?)
@@ -151,21 +153,8 @@ def run_energyplus_simulations(**kwargs):
 
     output_folder = kwargs.get('output_folder')
     if not os.path.exists(output_folder):
-        if kwargs.get('verbose'): print(f'Creating output folder {kwargs.get('output_folder')}')
+        if kwargs.get('verbose'): print(f"Creating output folder {kwargs.get('output_folder')}")
         os.mkdir(output_folder)
-
-    # Generate list of simulation jobs to run 
-    jobs = generate_simulation_jobs(**kwargs)
-
-    # if the user specified energy plus simulation outputs, ensure they're set within the IDF file
-    if kwargs.get('idf_configuration'):
-        bldg_to_idf_repository = kwargs.get('ResStockToEnergyPlus_repository')
-        if os.path.exists(bldg_to_idf_repository): sys.path.append(bldg_to_idf_repository)            # Source custom script
-        else: raise RuntimeError(f'Cannot find ResStockToEnergyPlus repository for setting IDF simulation outputs {bldg_to_idf_repository}')
-
-        import reset_idf_schedules_path      # import once the path is added 
-        for job in jobs: job.idf = job.idf_path  # make compatible with upstream workflow function 
-        reset_idf_schedules_path.set_EnergyPlus_Simulation_Output(jobs, **kwargs)
 
     # Iterative approach (could be parallelized for increased performance)
     start_time = time.time()

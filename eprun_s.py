@@ -62,8 +62,6 @@ def generate_simulation_jobs(**kwargs):
     climate = kwargs.get('climate')
 
     # Query input idf
-    print(f"kwargs.get('buildings_folder'): {kwargs.get('buildings_folder')}")
-    print(f"climate, city: {climate}, {city}")
     idf_dir = os.path.join(kwargs.get('buildings_folder'), climate, city)
     if not os.path.exists(idf_dir): raise RuntimeError(f"IDF directory not found: {idf_dir}")
 
@@ -80,9 +78,6 @@ def generate_simulation_jobs(**kwargs):
 
                 bldg_folder = os.path.basename(bldg_folder)
                 bldg_id = os.path.basename(idf).split("_")[0]    # get the folder name of the building as the bldg id
-                print(f"bldg_folder: {bldg_folder}")
-                print(f"bldg_id: {bldg_id}")
-
 
                 # the current upstream workflow generates an IDF file for each weather file to be simulated 
                 # so we check for the existence of those weather EPW files to run in simulation. Job initialization automatically finds this EPW. 
@@ -94,10 +89,11 @@ def generate_simulation_jobs(**kwargs):
     else: 
         # Check whether output exists and whether to overwrite 
         run_jobs = []
+        overwrite = kwargs.get('overwrite_output')
+
         for job in tqdm.tqdm(jobs, total=len(jobs), desc="Checking output folders", smoothing=0.01):            # for loop inside progoress bar
             job.output_path = os.path.join(kwargs.get('output_folder'), climate, city, job.bldg_id, job.bldg_dir) 
 
-            overwrite = kwargs.get('overwrite_output')
             if not os.path.exists(job.output_path):
                 if kwargs.get('verbose'): print(f'Creating output directory {job.output_path}')
                 os.makedirs(job.output_path)  

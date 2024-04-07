@@ -1,0 +1,174 @@
+"""
+Author: Camilo Toruno
+EnergyPlus pipeline simulation results aggregation and cost calculation 
+"""
+
+from pathlib import Path
+import os 
+import pandas as pd
+import csv
+import tqdm 
+import tempfile
+
+class Job:
+    """
+    Represents a custom object with folder, schedule, and xml attributes.
+    """
+    def __init__(self, eplusout, weather_scenario, city, bldg, year):
+        # require initialization with the folder of the files for the building
+        self.weather_scenario = os.path.basename(weather_scenario)  
+        self.city = os.path.basename(city)
+        self.bldg = bldg
+        self.year = int(os.path.basename(year).split(self.city.replace(' ', '.'))[1].split(self.weather_scenario)[0].strip('_')) 
+        self.bldg_id = int(os.path.basename(bldg).split('bldg')[1].strip('0'))  # convert to unpadded integer (e.g. bldg000123 -> 123)
+        self.eplusout = eplusout
+
+        # values to be updated
+        self.batch_id = None 
+
+def create_jobs(**arguments):
+    jobs = []
+    # Get all folders in the current directory
+    for scenario in Path(arguments.get('simulation_res_fldr')).glob("*"):
+        for city in Path(scenario).glob("*"):
+            for bldg in Path(city).glob("*"):
+                for year in Path(bldg).glob("*"):
+                    eplusout = year / 'eplusout.csv'
+                    if eplusout.exists():
+                        jobs.append(Job(eplusout, scenario, city, bldg, year))
+
+    return jobs 
+
+
+def aggregate_results(job, buildstock, arguments):
+    options = arguments.get("options")
+
+    # Split the column "Date/Time" string values with " " and create a new column "Date" with first element of split 
+    eplusout = pd.read_csv(job.eplusout)
+    # eplusout_choices = arguments.get('eplusout_exclude_header_key')
+
+    eplusout['Date'] = eplusout['Date/Time'].str.split().str[0]
+    eplusout[['Month', 'Day']] = eplusout['Date'].str.split('/', expand=True)
+    eplusout = eplusout.drop('Date/Time', axis=1)        # Delete the "Date/Time" column 
+    aggregated_results = pd.DataFrame(columns= eplusout.columns)
+
+    # aggregate results by month 
+    for i, month in enumerate(eplusout["Month"].unique()):
+        # set the date range
+        date_rows = eplusout["Month"] == month
+        aggregated_results.loc[i, "Month"] = month
+        aggregated_results.loc[i, 'bldg_id'] = int(job.bldg_id)
+        aggregated_results.loc[i, "Year"] = job.year
+        aggregated_results.loc[i, "Weather Scenario"] = job.weather_scenario
+
+        # for the columns to average, avereage results
+        for column_name in options.get("columns_to_average"):
+            aggregated_results.loc[i, column_name] = eplusout.loc[date_rows, column_name].mean()
+            aggregated_results.loc[i, column_name] = aggregated_results.loc[i, column_name].astype(float)
+
+        # for the remaining columns sum their values
+        for column_name in eplusout.columns:
+            if (column_name not in options.get("columns_to_average")) and (column_name not in options.get("unchanged_columns")):
+                aggregated_results.loc[i, column_name] = eplusout.loc[date_rows, column_name].sum()
+                aggregated_results.loc[i, column_name] = aggregated_results.loc[i, column_name].astype(float)
+
+    aggregated_results = pd.merge(aggregated_results, buildstock, how='inner', on='bldg_id', left_index=False, right_index=False, sort=False, suffixes=('_x', '_y'), copy=None, indicator=False, validate=None)
+    return aggregated_results
+
+
+def _load_header(results_file):
+    # load header 
+    with open(results_file, 'r') as f:
+        reader = csv.reader(f)
+        header = next(reader)
+        return header 
+
+
+def _add_columns(new_header, results_file, result_template, new_columns):
+
+    with tempfile.TemporaryFile(mode='w+', newline='') as temp_file:  # Create temporary file
+        with open(results_file, 'r') as f:  # Open original file for reading
+            reader = pd.read_csv(f, chunksize=2000) 
+            writer = csv.writer(temp_file)
+            writer.writerow(new_header) 
+
+            for chunk in reader:    # for chunks of 2000 file lines to limit memory usage 
+
+                for col in new_columns: chunk[col] = None   # set the new columns in the chunk of the file to none
+                chunk = chunk.fillna("")                    # Set missing values to empty string 
+
+                writer.writerows(chunk.to_records(index=False))  # Write to temporary file
+
+        # Overwrite original file with temporary file contents
+        with open(results_file, 'w') as f:
+            temp_file.seek(0)           # Rewind temporary file to beginning
+            f.write(temp_file.read())   # Copy contents
+
+
+def write_data(outputdata, results_file):
+
+    if not results_file.exists(): 
+        outputdata.to_csv(results_file, index=False)
+
+    else:
+        header = _load_header(results_file)
+        template_cols = set(header)  # Set of column names from the template
+        result_template = pd.DataFrame(columns=header)
+        new_columns = set(outputdata.columns) - set(result_template.columns)
+        missing_cols = template_cols - set(outputdata.columns)         # Identify missing columns in outputdata
+
+        for col in missing_cols: 
+            outputdata[col] = None                  # Add missing columns to outputdata with NaN values (empty cells)
+
+        for new_col in new_columns:
+            result_template[new_col] = None         # Add new columns to results
+
+        outputdata = outputdata[result_template.columns] # Sort outputdata columns by the order in results
+
+        if len(new_columns) > 0: 
+            _add_columns(outputdata.columns.to_list(), results_file, result_template, new_columns)
+            
+        # Append outputdata to updated results_file
+        with open(results_file, 'a') as f: 
+            outputdata.to_csv(f, header=False, index=False)
+        
+
+def run(arguments):
+    """
+        create a summary results data
+        for job in jobs:
+            # try to open the simulation results folder 
+
+            # join pricing data on table
+
+            # calculate cost per time period
+
+            # aggregate to aggregated_time_period to make summary
+                for each column aggregate properly 
+                    - keep first index's value
+                    - sum 
+                    - average
+                    
+            # join new summary data on metadata file 
+
+            if there's new columns in eplusout.columns that aren't in results_columns
+            add new columns from eplusout.columns to the end of the columns in results
+            initialize the new cells of the new columns as empty for the existing rows in results
+
+            # vertical concatenate the total summary data with new summary data
+    """
+
+    arguments["results_file"] = Path(arguments.get('simulation_res_fldr')).joinpath('results_summary.csv')
+
+    jobs = create_jobs(**arguments)
+
+    # load buildstock file for metadata and filter columns by metadata_choices.csv
+    buildstock = pd.read_csv(arguments.get('reference_buildstock'))
+    metadata_choices = pd.read_csv(arguments.get("metadata_choices"), header=None)
+    metadata_choices = metadata_choices.loc[:,0].to_list()
+    buildstock = buildstock[metadata_choices]
+    buildstock['bldg_id'] = buildstock['bldg_id'].astype(int)
+
+    for job in tqdm.tqdm(jobs, total=len(jobs), desc="Processing files", smoothing=0.01):
+        outputdata = aggregate_results(job, buildstock, arguments)
+        write_data(outputdata, results_file = arguments.get("results_file"))

@@ -26,6 +26,7 @@ class Job:
         # values to be updated
         self.batch_id = None 
 
+
 def create_jobs(**arguments):
     jobs = []
     # Get all folders in the current directory
@@ -84,7 +85,7 @@ def _load_header(results_file):
         return header 
 
 
-def _add_columns(new_header, results_file, result_template, new_columns):
+def _add_columns(new_header, results_file, new_columns):
 
     with tempfile.TemporaryFile(mode='w+', newline='') as temp_file:  # Create temporary file
         with open(results_file, 'r') as f:  # Open original file for reading
@@ -112,21 +113,17 @@ def write_data(outputdata, results_file):
 
     else:
         header = _load_header(results_file)
-        template_cols = set(header)  # Set of column names from the template
-        result_template = pd.DataFrame(columns=header)
-        new_columns = set(outputdata.columns) - set(result_template.columns)
-        missing_cols = template_cols - set(outputdata.columns)         # Identify missing columns in outputdata
+        new_columns = set(outputdata.columns) - set(header)                     # Id new columns for header
+        outputdata_missing_cols = set(header) - set(outputdata.columns)         # Identify missing columns in outputdata
+        header.extend(new_columns)                                              # add new columns to header
 
-        for col in missing_cols: 
-            outputdata[col] = None                  # Add missing columns to outputdata with NaN values (empty cells)
+        for col in outputdata_missing_cols: 
+            outputdata[col] = None                  # Add missing columns to outputdata with None values (empty cells)
 
-        for new_col in new_columns:
-            result_template[new_col] = None         # Add new columns to results
+        outputdata = outputdata[header]             # Sort outputdata columns by the order in results
 
-        outputdata = outputdata[result_template.columns] # Sort outputdata columns by the order in results
-
-        if len(new_columns) > 0: 
-            _add_columns(outputdata.columns.to_list(), results_file, result_template, new_columns)
+        # if there's new columns then add columns to existing results
+        if new_columns: _add_columns(header, results_file, new_columns)
             
         # Append outputdata to updated results_file
         with open(results_file, 'a') as f: 

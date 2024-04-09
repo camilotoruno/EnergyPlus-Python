@@ -41,7 +41,7 @@ def create_jobs(**arguments):
     return jobs 
 
 
-def aggregate_results(job, buildstock, arguments):
+def aggregate_results(job, arguments):
     options = arguments.get("options")
 
     # Split the column "Date/Time" string values with " " and create a new column "Date" with first element of split 
@@ -73,7 +73,6 @@ def aggregate_results(job, buildstock, arguments):
                 aggregated_results.loc[i, column_name] = eplusout.loc[date_rows, column_name].sum()
                 aggregated_results.loc[i, column_name] = aggregated_results.loc[i, column_name].astype(float)
 
-    aggregated_results = pd.merge(aggregated_results, buildstock, how='inner', on='bldg_id', left_index=False, right_index=False, sort=False, suffixes=('_x', '_y'), copy=None, indicator=False, validate=None)
     return aggregated_results
 
 
@@ -155,17 +154,10 @@ def run(arguments):
             # vertical concatenate the total summary data with new summary data
     """
 
-    arguments["results_file"] = Path(arguments.get('simulation_res_fldr')).joinpath('results_summary.csv')
+    arguments["results_file"] = Path(arguments.get('simulation_res_fldr')).joinpath(arguments.get('options').get('results_file'))
 
     jobs = create_jobs(**arguments)
 
-    # load buildstock file for metadata and filter columns by metadata_choices.csv
-    buildstock = pd.read_csv(arguments.get('reference_buildstock'))
-    metadata_choices = pd.read_csv(arguments.get("metadata_choices"), header=None)
-    metadata_choices = metadata_choices.loc[:,0].to_list()
-    buildstock = buildstock[metadata_choices]
-    buildstock['bldg_id'] = buildstock['bldg_id'].astype(int)
-
     for job in tqdm.tqdm(jobs, total=len(jobs), desc="Processing files", smoothing=0.01):
-        outputdata = aggregate_results(job, buildstock, arguments)
+        outputdata = aggregate_results(job, arguments)
         write_data(outputdata, results_file = arguments.get("results_file"))

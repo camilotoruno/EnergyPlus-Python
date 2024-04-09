@@ -19,8 +19,8 @@ class Job:
         self.weather_scenario = os.path.basename(weather_scenario)  
         self.city = os.path.basename(city)
         self.bldg = bldg
-        self.year = int(os.path.basename(year).split(self.city.replace(' ', '.'))[1].split(self.weather_scenario)[0].strip('_')) 
-        self.bldg_id = int(os.path.basename(bldg).split('bldg')[1].strip('0'))  # convert to unpadded integer (e.g. bldg000123 -> 123)
+        self.year = int(os.path.basename(year).split(self.city.replace(' ', '.'))[1].split(self.weather_scenario)[0].strip('_'))  
+        self.bldg_id = int(os.path.basename(bldg).split('bldg')[1].lstrip('0'))  # # (l)strip the (preceding) zeros off a bldg number (e.g. bldg000123 -> 123)
         self.eplusout = eplusout
 
         # values to be updated

@@ -10,6 +10,7 @@ arguments = {
             "unchanged_columns": ['Date', 'Month', 'Day'], 
             "results_file": "results_summary.csv",
             },
+    "overwrite": True, 
     }
 
 ep_res_aggregation.run(arguments)

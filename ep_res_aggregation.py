@@ -9,6 +9,7 @@ import pandas as pd
 import csv
 import tqdm 
 import tempfile
+import time
 
 class Job:
     """
@@ -156,8 +157,18 @@ def run(arguments):
 
     arguments["results_file"] = Path(arguments.get('simulation_res_fldr')).joinpath(arguments.get('options').get('results_file'))
 
+    if arguments.get('results_file').exists():
+        if arguments.get("overwrite"):
+            print(f"Deleteing output file: {arguments.get('results_file')}. Cancel job now if overwrite chosen in error.")
+            time.sleep(10)
+            os.remove(arguments.get('results_file'))
+
+        else: 
+            print(f"Output file exists: {arguments.get('results_file')}. \nOverwrite set to false. Data will be appended to output file")
+            time.sleep(10)
+
     jobs = create_jobs(**arguments)
 
     for job in tqdm.tqdm(jobs, total=len(jobs), desc="Processing files", smoothing=0.01):
         outputdata = aggregate_results(job, arguments)
-        write_data(outputdata, results_file = arguments.get("results_file"))
+        write_data(outputdata, results_file = arguments.get('results_file'))

@@ -3,45 +3,104 @@
 
 Version,
     22.1;                     !- Version Identifier
-
-LifeCycleCost:NonrecurringCost,
-  Default Cost,            !- Name
-  Construction,            !- Category
-  0,                       !- Cost
-  ServicePeriod;           !- Start of Costs
-
-
+    
 OUTPUT:VARIABLE,
     *,                        !- Key Value
     Site Outdoor Air Wetbulb Temperature,    !- Variable Name
-    Hourly;                 !- Reporting Frequency
-
+    Monthly;                 !- Reporting Frequency
 
 OUTPUT:VARIABLE,
     *,                        !- Key Value
     Site Outdoor Air Drybulb Temperature,    !- Variable Name
-    Hourly;                  !- Reporting Frequency
-
-
-
+    Monthly;                  !- Reporting Frequency
 
 OUTPUT:METER, 
     Heating:*, 
-    Hourly; 
+    Monthly; 
 
 OUTPUT:METER, 
     Cooling:*, 
-    Hourly; 
-
-
+    Monthly; 
 
 OUTPUT:METER,
     Electricity:Facility,     !- Key Name
-    Hourly;                 !- Reporting Frequency
+    Monthly;                 !- Reporting Frequency
 
 OUTPUT:METER,
     NaturalGas:Facility,      !- Key Name
-    Hourly;                 !- Reporting Frequency
+    Monthly;                 !- Reporting Frequency
+
+OUTPUT:METER, 
+    Electricity:Facility,
+    Monthly; 
+
+OUTPUT:METER, 
+    NaturalGas:Facility,
+    Monthly; 
+
+OUTPUT:METER, 
+    NaturalGas:Facility,
+    Monthly; 
+
+OUTPUT:METER, 
+    Gasoline:Facility,
+    Monthly; 
+
+OUTPUT:METER, 
+    Diesel:Facility,
+    Monthly; 
+
+OUTPUT:METER, 
+    Coal:Facility,
+    Monthly; 
+
+OUTPUT:METER, 
+    Coal:Facility,
+    Monthly; 
+
+OUTPUT:METER, 
+    FuelOilNo1:Facility,
+    Monthly; 
+
+OUTPUT:METER, 
+    FuelOilNo2:Facility,
+    Monthly; 
+    
+OUTPUT:METER, 
+    Propane:Facility,
+    Monthly; 
+
+OUTPUT:METER, 
+    OtherFuel1:Facility,
+    Monthly; 
+
+OUTPUT:METER, 
+    OtherFuel2:Facility,
+    Monthly; 
+
+OUTPUT:METER, 
+    Steam:Facility,
+    Monthly; 
+
+OUTPUT:METER, 
+    DistrictCooling:Facility,
+    Monthly; 
+
+OUTPUT:METER, 
+    DistrictHeating:Facility,
+    Monthly; 
+
+OUTPUT:METER, 
+    ElectricityPurchased:Facility,
+    Monthly; 
+
+OUTPUT:METER, 
+    ElectricitySurplusSold:Facility,
+    Monthly; 
+
+OUTPUT:METER, 
+    ElectricityNet:Facility,
+    Monthly; 
 
 OutputControl:Files,
     Yes,                      !- Output CSV

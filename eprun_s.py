@@ -123,6 +123,7 @@ def run_job(job):
     api = EnergyPlusAPI()                           # Prepare api
     state = api.state_manager.new_state()
     if not job.verbose: api.runtime.set_console_output_status(state, False)
+    else: print(f"bldg_id: {job.bldg_id} \t output_path: {job.output_path}")
 
     v = api.runtime.run_energyplus(state, ['-d', job.output_path, '-w', job.epw_path, job.idf_path])        # Execute simulation 
 
@@ -174,21 +175,3 @@ def run_energyplus_simulations(jobs, **kwargs):
     minutes = int((elapsed_time % 3600) // 60)
     seconds = int(elapsed_time % 60)
     print('\n-----EnergyPlus Simulation Summary-----\n\tSimulated ' + str(len(jobs)) + ' buildings \n' + f'\tExecution time: {hours:02d}hr:{minutes:02d}min:{seconds:02d}sec')
-
-
-if __name__ == "__main__":
-    # Parse input arguments if called from command line 
-    parser = argparse.ArgumentParser(description="Required eprun_s Arguments")
-
-    parser.add_argument('--city', '-c', help='city name (baltimore|boston|dallas|detroit|minneapolis|orlando|phoenix|seattle)', type=str, required=True)
-    parser.add_argument('--climate', '-w', help='climate scenario (historical|rcp45|rcp85)', type=str, required=True)
-    parser.add_argument('--ep_install_path', '-epp', help='location of the EnergyPlus install folder that has pyenergyplus', type=str, required=True)
-    parser.add_argument('--buildings_folder', '-bldgs_fldr', help='location of the buildings folder', type=str, required=True)
-    parser.add_argument('--weather_folder', '-wthr_fldr', help="Location of the weather scenarios", type=str, required=True)
-    parser.add_argument('--output_folder', '-o_fldr', help="Output folder", type=str, required=True)
-    parser.add_argument('--overwrite_output', '-overwrite', action='store_true', default=False, help="Overwrite existing output")
-    parser.add_argument('--verbose', '-v', action='store_true', default=False, help="Verbose output")
-
-    args = parser.parse_args()
-
-    run_energyplus_simulations(**vars(args))

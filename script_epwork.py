@@ -7,9 +7,33 @@ if __name__ == '__main__':
     multiprocessing.freeze_support()        # required to prevent issues for multicore processing in run_energyplus_simulations() 
 
     arguments = {
-        'cities': ['Detroit', 'Los Angeles'], 
-        # 'cities': ['Dallas', 'Philadelphia'],
-        'climate_scenarios': ["historical_1980-2020", "rcp45cooler_2020-2060"],
+        'cities': [
+			# "Phoenix",
+			"Los Angeles",
+			# "Denver",
+			"Orlando",
+			"Atlanta",
+			# "Boise City",
+			# "Chicago",
+			# "Kansas City",
+			# "Boston",
+			"Detroit",
+			# "Minneapolis",
+			# "Omaha",
+			"New York",
+			# "Philadelphia",
+			# "Dallas"
+			],
+
+        'climate_scenarios': [
+                "historical_1980-2020",
+                "rcp45cooler_2020-2060",
+                # "rcp45cooler_2060-2100",
+                # "rcp45hotter_2020-2060",
+                # "rcp45hotter_2060-2100",
+                "rcp85cooler_2020-2060",
+                # "rcp85cooler_2060-2100",
+                ], 
         }
 
     run_args = {
@@ -19,11 +43,11 @@ if __name__ == '__main__':
 
         'buildings_folder': "/Users/camilotoruno/Documents/local_research_data/buildings_LA_Detroit",
 
-        'output_folder': '/Users/camilotoruno/Documents/local_research_data/simulations_LA_Detroit',
+        'output_folder': '/Users/camilotoruno/Documents/local_research_data/simulations_five_cities',
         # 'output_folder': 'Volumes/seas-mtcraig/ctoruno/Buildings_Dallas_downsample_simulations',
         # 'output_folder': '/Users/camilotoruno/Documents/GitHub/EnergyPlus-Python/simulations',
 
-        'overwrite_output': True, 
+        'overwrite_output': False, 
         'verbose': False,
         "max_cpu_load": 0.7,       # must be in the range [0, 1]. The value 1 indidcates all CPU cores, 0 indicates 1 CPU core
 

@@ -47,11 +47,15 @@ def aggregate_results(job, arguments):
 
     # Split the column "Date/Time" string values with " " and create a new column "Date" with first element of split 
     eplusout = pd.read_csv(job.eplusout)
-    # eplusout_choices = arguments.get('eplusout_exclude_header_key')
 
-    eplusout['Date'] = eplusout['Date/Time'].str.split().str[0]
-    eplusout[['Month', 'Day']] = eplusout['Date'].str.split('/', expand=True)
-    eplusout = eplusout.drop('Date/Time', axis=1)        # Delete the "Date/Time" column 
+    ### If the Date/Time column is the Day/Month/Year, split into components 
+    # eplusout['Date'] = eplusout['Date/Time'].str.split().str[0]
+    # eplusout[['Month', 'Day']] = eplusout['Date'].str.split('/', expand=True)
+    # eplusout = eplusout.drop('Date/Time', axis=1)        # Delete the "Date/Time" column 
+
+    ### If date/time column is just the month, rename to Month
+    eplusout = eplusout.rename(columns={'Date/Time': 'Month'})
+
     aggregated_results = pd.DataFrame(columns= eplusout.columns)
 
     # aggregate results by month 

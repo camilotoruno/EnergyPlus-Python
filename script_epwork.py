@@ -22,7 +22,7 @@ if __name__ == '__main__':
 			# "Omaha",
 			"New York",
 			# "Philadelphia",
-			# "Dallas"
+			"Dallas"
 			],
 
         'climate_scenarios': [

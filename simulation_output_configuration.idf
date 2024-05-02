@@ -104,8 +104,8 @@ OUTPUT:METER,
 
 OutputControl:Files,
     Yes,                      !- Output CSV
-    No,                      !- Output MTR
-    No,                      !- Output ESO
+    No,                       !- Output MTR
+    No,                       !- Output ESO
     No,                       !- Output EIO
     No,                       !- Output Tabular
     No,                       !- Output SQLite

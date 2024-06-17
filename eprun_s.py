@@ -128,8 +128,7 @@ def run_job(job):
     v = api.runtime.run_energyplus(state, ['-d', job.output_path, '-w', job.epw_path, job.idf_path])        # Execute simulation 
 
     if v != 0:
-        print("EnergyPlus Simulation Failed")
-        sys.exit(1)
+        raise RuntimeError("EnergyPlus Simulation Failed")
 
     api.state_manager.delete_state(state)           # required to free up memory 
 

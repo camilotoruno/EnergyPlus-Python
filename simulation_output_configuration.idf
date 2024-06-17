@@ -31,31 +31,11 @@ OUTPUT:METER,
     Monthly;                 !- Reporting Frequency
 
 OUTPUT:METER, 
-    Electricity:Facility,
-    Monthly; 
-
-OUTPUT:METER, 
-    NaturalGas:Facility,
-    Monthly; 
-
-OUTPUT:METER, 
-    NaturalGas:Facility,
-    Monthly; 
-
-OUTPUT:METER, 
     Gasoline:Facility,
     Monthly; 
 
 OUTPUT:METER, 
     Diesel:Facility,
-    Monthly; 
-
-OUTPUT:METER, 
-    Coal:Facility,
-    Monthly; 
-
-OUTPUT:METER, 
-    Coal:Facility,
     Monthly; 
 
 OUTPUT:METER, 

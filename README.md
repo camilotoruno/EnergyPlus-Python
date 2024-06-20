@@ -11,3 +11,12 @@ From base folder (repostory folder) call the command python eprun_s.py script
 ```python eprun_s.py --city <City> --climate <weather_scenario> --ep_install_path <pyenergyplus location> --buildings_folder <buildings folder from ResStock to EnergyPlus workflow> --weather_folder <Location of weather scenarios> --output_folder <desired output folder>```
 
 An example is ```python eprun_s.py --city Dallas --climate historical_1980-2020 --ep_install_path /Applications/OpenStudio-3.4.0/EnergyPlus --buildings_folder /Users/camilotoruno/Documents/local_research_data/Buildings --weather_folder /Volumes/seas-mtcraig/EPWFromTGW/TGWEPWs --output_folder /Users/camilotoruno/Documents/local_research_data/simulations --overwrite```
+
+## run_output_aggregation.py
+Use script to aggregate output from simulation results folder. This is currently set up for to monthly data, however you may need to change the data to aggregate truly monthly data. Changing the reporting frequency changes the column header changes (e.g. Date/Time, Date), and thus this will need to be modified lighly for different frequencies. Keep in mind the design of the aggregation script to read and write single lines (rather than loading the full output file) to avoid loading the entire aggregated csv in memory (because it could be larger than memory for sample size datasets). 
+
+## pricing_data_cleaning.ipynb
+Use this to clean up EIA / FRED electriicty, natural gas, etc pricing data and format it for the next step, calculating household costs. 
+
+## joining_metadata_calculating_costs.ipynb
+Use to join the metadata (buildstock.csv) data on the aggregated results, calculate household level costs. 

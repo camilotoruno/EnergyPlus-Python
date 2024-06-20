@@ -7,22 +7,33 @@ if __name__ == '__main__':
     multiprocessing.freeze_support()        # required to prevent issues for multicore processing in run_energyplus_simulations() 
 
     arguments = {
-        'cities': [
-			# "Phoenix",
+        'cities': [            
+            # "AZ, Phoenix",
 			"Los Angeles",
-			# "Denver",
-			"Orlando",
-			"Atlanta",
-			# "Boise City",
-			# "Chicago",
-			# "Kansas City",
-			# "Boston",
-			"Detroit",
-			# "Minneapolis",
-			# "Omaha",
+			# # "CA, San Diego",
+			# # "CA, San Francisco",
+			# # "CO, Denver",
+			# "FL, Jacksonville",
+			# "FL, Miami",
+			"Chicago",
+			# # "IN, Indianapolis City Balance",
+			# # "KY, Louisville Jefferson County Metro Government Balance",
+			# "MD, Baltimore",
+			# "MI, Detroit",
+			# "MN, Duluth",
+			# # "MT, Billings",
+			# "NM, Albuquerque",
 			"New York",
-			# "Philadelphia",
-			"Dallas"
+			# # "OH, Cleveland",
+			# "OK, Oklahoma City",
+			"Portland",
+			# "PA, Philadelphia",
+			# "TN, Memphis",
+			"Dallas",
+			"Houston",
+			# # "TX, San Antonio",
+			# # "WI, Milwaukee",
+            
 			],
 
         'climate_scenarios': [
@@ -37,22 +48,20 @@ if __name__ == '__main__':
         }
 
     run_args = {
-
         'weather_folder': '/Volumes/seas-mtcraig/EPWFromTGW/TGWEPWs',
         # 'weather_folder': '/Users/camilotoruno/Documents/GitHub/EnergyPlus-Python/TGWEPWs_trimmed',
 
-        'buildings_folder': "/Users/camilotoruno/Documents/local_research_data/buildings_LA_Detroit",
+        'buildings_folder': "/Users/camilotoruno/Documents/local_research_data/buildings",
 
-        'output_folder': '/Users/camilotoruno/Documents/local_research_data/simulations_five_cities',
+        'output_folder': '/Users/camilotoruno/Documents/local_research_data/simulations',
         # 'output_folder': 'Volumes/seas-mtcraig/ctoruno/Buildings_Dallas_downsample_simulations',
         # 'output_folder': '/Users/camilotoruno/Documents/GitHub/EnergyPlus-Python/simulations',
 
         'overwrite_output': False, 
         'verbose': False,
-        "max_cpu_load": 0.7,       # must be in the range [0, 1]. The value 1 indidcates all CPU cores, 0 indicates 1 CPU core
+        "max_cpu_load": 0.5,       # must be in the range [0, 1]. The value 1 indidcates all CPU cores, 0 indicates 1 CPU core
 
         'ep_install_path': '/Applications/OpenStudio-3.4.0/EnergyPlus',
-
 
         # Optional - Define the desired simulation settings. These can be set during the IDF generation 
         # or prior to simulation. 

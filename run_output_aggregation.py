@@ -8,7 +8,7 @@ arguments = {
     "simulation_res_fldr": "/Users/camilotoruno/Documents/local_research_data/simulations",
     "options": {"columns_to_average": [drybulb_temp, wetbulb_temp], 
             "unchanged_columns": ['Date', 'Month', 'Day', 'Date/Time'], 
-            "results_file": "results_summary.csv",
+            "results_file": "simulations.csv",
             },
     "overwrite": True, 
     }

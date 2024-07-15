@@ -7,40 +7,39 @@ if __name__ == '__main__':
     multiprocessing.freeze_support()        # required to prevent issues for multicore processing in run_energyplus_simulations() 
 
     arguments = {
-        'cities': [            
-            # "AZ, Phoenix",
+        'cities': [   
+			"Phoenix",
 			"Los Angeles",
-			# # "CA, San Diego",
-			# # "CA, San Francisco",
-			# # "CO, Denver",
-			# "FL, Jacksonville",
-			# "FL, Miami",
+			"San Diego",
+			"San Francisco",
+			# "CO, Denver",     # not in weather folder
+			"Jacksonville",
+			"Miami",
 			"Chicago",
-			# # "IN, Indianapolis City Balance",
-			# # "KY, Louisville Jefferson County Metro Government Balance",
-			# "MD, Baltimore",
-			# "MI, Detroit",
-			# "MN, Duluth",
-			# # "MT, Billings",
-			# "NM, Albuquerque",
+			# "IN, Indianapolis",
+			# "KY, Louisville Jefferson County Metro Government Balance",   # not in weather folder
+			"Baltimore",
+			"Detroit",
+			"Duluth",
+			"Billings",
+			"Albuquerque",
 			"New York",
-			# # "OH, Cleveland",
-			# "OK, Oklahoma City",
+			"Cleveland",
+			"Oklahoma City",
 			"Portland",
-			# "PA, Philadelphia",
-			# "TN, Memphis",
+			"Philadelphia",
+			"Memphis",
 			"Dallas",
 			"Houston",
-			# # "TX, San Antonio",
-			# # "WI, Milwaukee",
-            
+			"San Antonio",
+			"Milwaukee",
 			],
 
         'climate_scenarios': [
                 "historical_1980-2020",
-                "rcp45cooler_2020-2060",
+                # "rcp45cooler_2020-2060",
                 # "rcp45cooler_2060-2100",
-                # "rcp45hotter_2020-2060",
+                "rcp45hotter_2020-2060",
                 # "rcp45hotter_2060-2100",
                 "rcp85cooler_2020-2060",
                 # "rcp85cooler_2060-2100",
@@ -59,7 +58,7 @@ if __name__ == '__main__':
 
         'overwrite_output': False, 
         'verbose': False,
-        "max_cpu_load": 0.5,       # must be in the range [0, 1]. The value 1 indidcates all CPU cores, 0 indicates 1 CPU core
+        "max_cpu_load": 4/12,       # must be in the range [0, 1]. The value 1 indidcates all CPU cores, 0 indicates 1 CPU core
 
         'ep_install_path': '/Applications/OpenStudio-3.4.0/EnergyPlus',
 
@@ -80,7 +79,7 @@ if __name__ == '__main__':
     total_sims = len(arguments['climate_scenarios']) * len(arguments['cities'])
     for scenario in arguments['climate_scenarios']:
         for city in arguments['cities']:
-            print(f"========================== Run \t City \t\t\t Scenario ==========================")
+            print(f"========================== Run \t\t City \t\t\t Scenario ==========================")
             print(f"========================== {sim}/{total_sims} \t {city} \t\t {scenario} ==========================")
             run_args['city'] = city
             run_args['climate'] = scenario

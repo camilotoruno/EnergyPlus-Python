@@ -1,0 +1,21 @@
+#!/bin/bash
+
+#SBATCH --job-name=eppythonruns
+#SBATCH --nodes=1
+#SBATCH --cpus-per-task=4
+#SBATCH --ntasks-per-node=1
+#SBATCH --mem-per-cpu=5GB 
+#SBATCH --time=72:00:00
+#SBATCH --mail-type=END,FAIL
+#SBATCH --account=<account>
+#SBATCH --partition=standard
+
+# No package necessary beyond installation of EnergyPlus --> sourcing occurs in python script
+module load gcc
+
+# Set inputs to Python script --> Can be later parametrized to be driven by a .sh script
+echo "Running: EnergyPlus simulations"
+
+python3 script_epwork.py
+
+exit

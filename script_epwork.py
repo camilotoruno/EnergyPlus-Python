@@ -12,12 +12,12 @@ if __name__ == '__main__':
 			"Los Angeles",
 			"San Diego",
 			"San Francisco",
-			# "CO, Denver",     # not in weather folder
+			"Denver",     # not in weather folder
 			"Jacksonville",
 			"Miami",
 			"Chicago",
-			# "IN, Indianapolis",
-			# "KY, Louisville Jefferson County Metro Government Balance",   # not in weather folder
+			"Indianapolis City Balance",
+			"Louisville Jefferson County Metro Government Balance",   # not in weather folder
 			"Baltimore",
 			"Detroit",
 			"Duluth",
@@ -50,15 +50,15 @@ if __name__ == '__main__':
         'weather_folder': '/Volumes/seas-mtcraig/EPWFromTGW/TGWEPWs',
         # 'weather_folder': '/Users/camilotoruno/Documents/GitHub/EnergyPlus-Python/TGWEPWs_trimmed',
 
-        'buildings_folder': "/Users/camilotoruno/Documents/local_research_data/buildings",
+        'buildings_folder': "/Users/camilotoruno/Documents/local_research_data/buildings 24.08.12",
 
-        'output_folder': '/Users/camilotoruno/Documents/local_research_data/simulations',
+        'output_folder': '/Users/camilotoruno/Documents/local_research_data/simulations 24.08.12',
         # 'output_folder': 'Volumes/seas-mtcraig/ctoruno/Buildings_Dallas_downsample_simulations',
         # 'output_folder': '/Users/camilotoruno/Documents/GitHub/EnergyPlus-Python/simulations',
 
         'overwrite_output': False, 
         'verbose': False,
-        "max_cpu_load": 4/12,       # must be in the range [0, 1]. The value 1 indidcates all CPU cores, 0 indicates 1 CPU core
+        "max_cpu_load": 6/12,       # must be in the range [0, 1]. The value 1 indidcates all CPU cores, 0 indicates 1 CPU core
 
         'ep_install_path': '/Applications/OpenStudio-3.4.0/EnergyPlus',
 
